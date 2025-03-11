@@ -1,47 +1,79 @@
-YT Sentiment Analysis
-A Python-based web application that performs sentiment analysis on YouTube video comments using GPT-3.5 Turbo and provides both Flask and Streamlit interfaces.
+# YouTube Comment Sentiment Analysis
 
-Features
-YouTube video search using the YouTube Data API
-Comment fetching from multiple videos
-Sentiment analysis using GPT-3.5 Turbo
-Web interface options using Flask or Streamlit
-Support for custom sentiment categories
-Core Components
-YouTube Integration
-The youtube_search function in ytSearch.py handles video searching:
+A Flask web application that searches for YouTube videos and analyzes their comments for sentiment using TextBlob and Google's Gemini API.
 
-Comment Fetching
-Comments are retrieved using the raw_comments function in fetchComments.py.
+## Features
 
-Sentiment Analysis
-Sentiment analysis is performed using OpenAI's GPT-3.5 Turbo through the get_sentiment_summary function in utils.py.
+- Search for YouTube videos by keyword
+- Analyze top 3 videos with up to 100 comments each
+- Calculate sentiment statistics (positive, negative, neutral percentages)
+- Generate AI-powered summaries of comment themes and opinions using Gemini API
+- Clean, modern UI with responsive design
 
-Setup
-Install required packages:
-Configure API keys:
-YouTube API key
-OpenAI API key
-Usage
-Flask Interface
-Run the Flask application:
+## Installation
 
-Streamlit Interface
-Run the Streamlit application:
+1. Clone this repository:
+```
+git clone <repository-url>
+cd yt_sentiment_analysis
+```
 
-Project Structure
-app.py - Flask web application
-Streamlit.py - Streamlit interface
-ytSearch.py - YouTube search functionality
-fetchComments.py - Comment fetching
-analyzeSentiment.py - Sentiment analysis
-utils.py - Utility functions and OpenAI integration
-Dependencies
-Flask
-Streamlit
-google-api-python-client
-openai
-transformers
-Security Note
-Important: Keep your API keys secure and never commit them to version control.
+2. Create and activate a virtual environment:
+```
+python -m venv myenv
+# On Windows
+myenv\Scripts\activate 
+# On macOS/Linux
+source myenv/bin/activate
+```
 
+3. Install dependencies:
+```
+pip install -r requirements.txt
+```
+
+4. Set up API keys:
+   - YouTube Data API key (for video search and comments)
+   - Google Gemini API key (for AI-powered sentiment summaries)
+
+## Usage
+
+1. Run the application:
+```
+python app.py
+```
+
+2. Open a web browser and go to `http://127.0.0.1:5000/`
+
+3. Enter a search query and sentiment categories (comma-separated)
+
+4. Click "Analyze Sentiment" to see the results
+
+## Project Structure
+
+- `app.py`: Main Flask application file
+- `ytSearch.py`: YouTube search functionality
+- `fetchComments.py`: YouTube comment fetching
+- `analyzeSentiment.py`: Comment cleaning and basic sentiment analysis
+- `utils.py`: Sentiment summary generation with Gemini API
+- `static/css/index.css`: Application styling
+- `templates/index.html`: HTML template for the web interface
+
+## Dependencies
+
+- Flask: Web framework
+- google-api-python-client: YouTube API access
+- textblob: Basic sentiment analysis
+- google-generativeai: Gemini API for AI summaries
+- transformers/pytorch: Advanced NLP capabilities
+- Other dependencies in requirements.txt
+
+## Notes
+
+- The application limits analysis to 100 comments per video to improve efficiency
+- Gemini API provides detailed text summaries of comments when available
+- If the Gemini API fails, the app falls back to basic statistical analysis
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 
