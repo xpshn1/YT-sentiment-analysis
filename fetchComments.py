@@ -1,10 +1,12 @@
 import googleapiclient.discovery
 from googleapiclient.errors import HttpError
-
+import os
 
 
 def raw_comments(video_ids):
-    api_key = 'AIzaSyCZI7tkbCHCFVUlthHbtcFfIwrsJ99004w'
+    api_key = os.environ.get('YOUTUBE_API_KEY')
+    if not api_key:
+        raise ValueError("YOUTUBE_API_KEY environment variable not set.")
 
     youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=api_key)
 

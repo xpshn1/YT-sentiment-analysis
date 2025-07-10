@@ -1,9 +1,12 @@
 from googleapiclient.discovery import build
 import traceback
+import os
 
 
 def youtube_search(query):
-    DEVELOPER_KEY = 'AIzaSyCZI7tkbCHCFVUlthHbtcFfIwrsJ99004w'
+    DEVELOPER_KEY = os.environ.get('YOUTUBE_API_KEY')
+    if not DEVELOPER_KEY:
+        raise ValueError("YOUTUBE_API_KEY environment variable not set.")
     YOUTUBE_API_SERVICE_NAME = 'youtube'
     YOUTUBE_API_VERSION = 'v3'
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)

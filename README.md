@@ -72,23 +72,59 @@ source venv/bin/activate
     *(If you encounter issues, open `requirements.txt` in a text editor, save it with UTF-8 encoding, and try again.)*
 
 4.  **API Key Configuration:**
-    This application requires API keys for both the YouTube Data API and the Google Gemini API.
+    This application requires API keys for both the YouTube Data API and the Google Gemini API. These keys should be configured using environment variables.
 
-    **IMPORTANT SECURITY NOTICE:** The provided source code contains placeholder API keys directly embedded in files (`ytSearch.py`, `fetchComments.py`, `utils.py`). **These are NOT secure and will likely not work or will be quickly disabled.** You MUST replace them with your own valid API keys.
+    **IMPORTANT: API Key Security**
+    Previously, this project contained hardcoded API keys. This practice is insecure. The code has been updated to read API keys from environment variables. You MUST set these environment variables in your environment for the application to function.
 
-    -   **YouTube Data API Key:**
+    **Required Environment Variables:**
+
+    1.  **`YOUTUBE_API_KEY`**:
+        -   Your YouTube Data API v3 key.
         -   Obtain a key from the [Google Cloud Console](https://console.cloud.google.com/apis/library/youtube.googleapis.com).
-        -   Enable the "YouTube Data API v3".
-        -   Replace the placeholder `DEVELOPER_KEY = 'AIzaSyCZI7tkbCHCFVUlthHbtcFfIwrsJ99004w'` in:
-            -   `ytSearch.py`
-            -   `fetchComments.py`
-            -   `utils.py` (within the `youtube_search` and `fetch_comments` functions, though these appear to be duplicates of the ones in their respective modules and might be unused or for testing).
-    -   **Google Gemini API Key:**
-        -   Obtain a key from [Google AI Studio](https://aistudio.google.com/app/apikey).
-        -   Replace the placeholder `api_key = "YOUR_GEMINI_API_KEY"` (or similar, e.g., `AIzaSyDOnmmajGfJh1ssDfJq0wzQ0qbgamzO-ck`) in:
-            -   `utils.py` (within the `get_sentiment_summary` function).
+        -   Ensure the "YouTube Data API v3" is enabled for your project.
+        -   The application uses this key in `ytSearch.py` and `fetchComments.py`.
 
-    **Recommendation:** For better security and manageability, consider using environment variables to store your API keys instead of hardcoding them. You would then modify the Python scripts to read these keys from the environment.
+    2.  **`GEMINI_API_KEY`**:
+        -   Your Google Gemini API key.
+        -   Obtain a key from [Google AI Studio](https://aistudio.google.com/app/apikey).
+        -   The application uses this key in `utils.py` for generating AI summaries. If this key is not provided, the application will fall back to showing only statistical sentiment analysis.
+
+    **Setting Environment Variables:**
+
+    *   **Local Development (Recommended):**
+        Create a file named `.env` in the project root directory (alongside `app.py`). Add your API keys to this file like so:
+        ```
+        YOUTUBE_API_KEY="YOUR_ACTUAL_YOUTUBE_API_KEY"
+        GEMINI_API_KEY="YOUR_ACTUAL_GEMINI_API_KEY"
+        ```
+        To load these variables when the application runs, you can install `python-dotenv`:
+        ```bash
+        pip install python-dotenv
+        ```
+        And add the following lines at the beginning of your `app.py` (before other imports that might need the keys):
+        ```python
+        from dotenv import load_dotenv
+        load_dotenv()
+        ```
+        **Ensure `.env` is added to your `.gitignore` file** to prevent committing it. The provided `.gitignore` should already cover this.
+
+    *   **Production/Deployment:**
+        Consult your deployment platform's documentation for setting environment variables (e.g., Heroku config vars, AWS Elastic Beanstalk environment properties, Docker environment variables).
+
+    *Note on `commentsimport&analysis (1).py`: This development script also previously contained a hardcoded API key. If you intend to use this script, it has been modified to attempt to read `YOUTUBE_API_KEY` from environment variables as well. However, due to tool limitations, the removal of its hardcoded key could not be programmatically verified during the last automated update. Please manually inspect and ensure no hardcoded keys remain if you use this script.*
+
+## Security Considerations
+
+*   **API Keys:** As detailed above, API keys are sensitive. Use environment variables and follow best practices for managing them.
+*   **Flask Debug Mode:** Ensure `debug=False` when deploying the application using a production WSGI server.
+*   **Dependency Management:** Regularly scan project dependencies for known vulnerabilities and update them. Tools like `pip-audit` or GitHub's Dependabot can automate this process.
+    ```bash
+    # Example: Using pip-audit
+    pip install pip-audit
+    pip-audit
+    ```
+*   **Error Handling:** The application now logs detailed errors to `app.log` and displays generic messages to users. Review logs for any issues.
 
 ## Usage
 
@@ -105,6 +141,8 @@ source venv/bin/activate
     -   Optionally, modify the comma-separated sentiment categories (default: "Positive, Negative, Neutral").
     -   Click "Analyze Sentiment".
     -   Wait for the results. The application will display the top 3 videos with their sentiment analysis.
+
+    **Note on Production Deployment:** The current `app.py` runs the Flask development server with `debug=True`. This setting is convenient for development but **MUST NOT** be used in a production environment due to security risks (exposing an interactive debugger). For production, use a proper WSGI server (like Gunicorn or uWSGI) and ensure debug mode is off.
 
 ## Project Structure
 
