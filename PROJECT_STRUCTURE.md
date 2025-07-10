@@ -24,7 +24,7 @@ yt_sentiment_analysis/
 ├── README.md              # Project documentation
 ├── requirements.txt       # Project dependencies
 │
-└── myenv/                 # Virtual environment (not in version control)
+└── venv/                  # Virtual environment (not in version control)
 ```
 
 ## Key Components Interaction

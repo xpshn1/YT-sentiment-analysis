@@ -14,30 +14,35 @@ This guide will help you get the YouTube Sentiment Analysis application up and r
 1. **Clone or download the project** to your local machine.
 
 2. **Set up a virtual environment**:
-   ```
-   python -m venv myenv
+   ```bash
+   python -m venv venv
    
    # On Windows
-   myenv\Scripts\activate
+   venv\Scripts\activate
    
    # On macOS/Linux
-   source myenv/bin/activate
+   source venv/bin/activate
    ```
 
 3. **Install dependencies**:
-   ```
+   The `requirements.txt` file may have encoding issues (UTF-16 LE with BOM). Ensure it is saved as UTF-8 before running:
+   ```bash
    pip install -r requirements.txt
    ```
+   *(If you encounter issues, open `requirements.txt` in a text editor, save it with UTF-8 encoding, and try again.)*
 
 4. **Configure API keys**:
-   - Open `utils.py` and replace the Gemini API key with your own:
+   **IMPORTANT SECURITY NOTICE:** The provided source code may contain placeholder API keys. **These are NOT secure and will likely not work or will be quickly disabled.** You MUST replace them with your own valid API keys. For detailed instructions on obtaining keys, refer to the main `README.md` file.
+
+   - Open `utils.py` and replace the **Google Gemini API key**:
      ```python
-     api_key = "YOUR_GEMINI_API_KEY"  # Replace with your key
+     api_key = "YOUR_GEMINI_API_KEY"  # Replace with your actual key
      ```
-   - Open `ytSearch.py` and `fetchComments.py` and replace the YouTube API key:
+   - Open `ytSearch.py` and `fetchComments.py` and replace the **YouTube Data API key**:
      ```python
-     DEVELOPER_KEY = 'YOUR_YOUTUBE_API_KEY'  # Replace with your key
+     DEVELOPER_KEY = 'YOUR_YOUTUBE_API_KEY'  # Replace with your actual key
      ```
+   It is highly recommended to use environment variables for API keys in a production environment.
 
 ## Running the Application
 
