@@ -3,6 +3,7 @@ from googleapiclient.discovery import build
 import os
 import google.generativeai as genai
 import traceback
+import html
 
 
 # Setup for YouTube API
@@ -183,7 +184,9 @@ def get_sentiment_summary(comments, categories):
                         )
                     
                     if response and hasattr(response, 'text'):
-                        summary_text = response.text.strip()
+                        # Escape model output before rendering it into HTML to avoid
+                        # rendering untrusted tags/scripts in the browser.
+                        summary_text = html.escape(response.text.strip()).replace("\n", "<br>")
                         print(f"Successfully received text summary from Gemini model {model_name}")
                         
                         # Create the complete summary with both statistics and text
